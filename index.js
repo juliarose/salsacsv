@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * Used for converting data to and from CSV.
+ * @module salsacsv
+ */
+
+/**
  * Escapes a string in CSV.
  * @param {String} str - String.
  * @returns {String} Escaped string.
@@ -531,11 +536,6 @@ function cellLabel(rowNumber, columnNumber) {
  * @param {Object} details.column - Column number.
  */
 
-
-/**
- * Used for converting data to and from CSV.
- * @module salsacsv
- */
 module.exports = {
     toCSV,
     fromCSV,
