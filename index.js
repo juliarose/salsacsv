@@ -522,8 +522,8 @@ function cellLabel(rowNumber, columnNumber) {
  * @param {Object} details - Details of cell.
  * @param {Object} details.obj - Source object.
  * @param {String} details.key - The key of the value we want to take from the object for this column.
- * @param {Object} details.row - Row number.
- * @param {Object} details.column - Column number.
+ * @param {Number} details.row - Row number.
+ * @param {Number} details.column - Column number.
  */
 
 /**
@@ -532,8 +532,8 @@ function cellLabel(rowNumber, columnNumber) {
  * @param {String} value - Value of cell.
  * @param {Object} details - Details of cell.
  * @param {String} details.key - Name of key to assign to object.
- * @param {Object} details.row - Row number.
- * @param {Object} details.column - Column number.
+ * @param {Number} details.row - Row number.
+ * @param {Number} details.column - Column number.
  */
 
 module.exports = {
