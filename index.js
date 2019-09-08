@@ -50,6 +50,7 @@ function detectColumn(column) {
 /**
  * Detects columns from a CSV string.
  * @param {String} csvStr - CSV string.
+ * @param {Object} [options={}] - Options.
  * @param {Boolean} [options.includeHeader] - Whether the CSV has a header or not.
  * @param {String} [options.delimeter=','] - The delimiter of the CSV string.
  * @returns {Column[]} Array of columns.
@@ -79,6 +80,7 @@ function detectColumnsFromCSV(csvStr, options = {}) {
 /**
  * Detects columns from an array of objects.
  * @param {Object[]} rows - Array of objects to take columns from.
+ * @param {Object} [options={}] - Options.
  * @param {Boolean} [options.includeHeader] - Whether the CSV has a header or not.
  * @returns {Column[]} Array of columns.
  * @private
@@ -208,7 +210,6 @@ function csvToArray(str, delimiter = ',') {
  * @param {Boolean} [options.includeHeader] - Whether the CSV has a header or not, the first line will be skipped if this is set to true.
  * @param {String} [options.delimeter=','] - The delimiter for the CSV string.
  * @returns {String} CSV string.
- * @public
  * @memberof salsacsv
  *
  * @example
@@ -230,7 +231,7 @@ function csvToArray(str, delimiter = ',') {
  * ], {
  *     includeHeader: true
  * });
- * // "Name","Price"\n"Cat Chow",5.29
+ * // '"Name","Price"\n"Cat Chow",5.29'
  */
 function toCSV(rows, columns, options = {}) {
     if (!Array.isArray(rows)) {
@@ -349,7 +350,6 @@ function toCSV(rows, columns, options = {}) {
  * @param {Boolean} [options.includeEmptyValues] - Whether to assign empty values to object or not.
  * @param {String} [options.delimeter=','] - The delimiter of the CSV string.
  * @returns {Object[]} Array of objects.
- * @public
  * @memberof salsacsv
  * 
  * @example
@@ -491,10 +491,9 @@ function fromCSV(csvStr, columns, options = {}) {
 
 /**
  * Gets the cell label.
- * @param {Number} rowNumber - Zero-based row number.
- * @param {Number} columnNumber - Zero-based column number.
+ * @param {Number} rowNumber - Zero-indexed row number.
+ * @param {Number} columnNumber - Zero-indexed column number.
  * @returns {String} Cell label.
- * @public
  * @memberof salsacsv
  *
  * @example
@@ -511,7 +510,7 @@ function cellLabel(rowNumber, columnNumber) {
  * @property {String} [key] - The object key for this column.
  * @property {Boolean} [required] - Indicates whether the value should be defined when getting value from CSV. Throws an error if the resulting value is null, undefined, or an empty string.
  * @property {Converter} [converter] - The function called to convert value to CSV.
- * @property {Parser} [parser] - The function called to parse value from CSV. Will not be called unless parseEmpty is set to true.
+ * @property {Parser} [parser] - The function called to parse value from CSV. If the value to parse is empty, the function will not be called unless parseEmpty is set to true.
  * @property {Boolean} [parseEmpty] - Whether to parse empty values or not.
  */
 

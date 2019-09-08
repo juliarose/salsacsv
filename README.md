@@ -60,7 +60,7 @@ toCSV([
 ], {
     includeHeader: true
 });
-// "Name","Price"\n"Cat Chow",5.29
+// '"Name","Price"\n"Cat Chow",5.29'
 ```
 
 Returns **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** CSV string.
@@ -120,8 +120,8 @@ Gets the cell label.
 
 ##### Parameters
 
--   `rowNumber` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Zero-based row number.
--   `columnNumber` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Zero-based column number.
+-   `rowNumber` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Zero-indexed row number.
+-   `columnNumber` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Zero-indexed column number.
 
 ##### Examples
 
@@ -143,7 +143,7 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 -   `key` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** The object key for this column.
 -   `required` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Indicates whether the value should be defined when getting value from CSV. Throws an error if the resulting value is null, undefined, or an empty string.
 -   `converter` **[Converter](#converter)?** The function called to convert value to CSV.
--   `parser` **[Parser](#parser)?** The function called to parse value from CSV. Will not be called unless parseEmpty is set to true.
+-   `parser` **[Parser](#parser)?** The function called to parse value from CSV. If the value to parse is empty, the function will not be called unless parseEmpty is set to true.
 -   `parseEmpty` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Whether to parse empty values or not.
 
 ### Converter
