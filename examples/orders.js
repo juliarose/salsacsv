@@ -1,8 +1,6 @@
 'use strict';
 
-// this is used for comprehensive testing
-
-const {cellLabel} = require('../..');
+const salsacsv = require('salsacsv');
 
 // helper functions for our data
 
@@ -76,8 +74,8 @@ const columns = [
         // this generates a spreadsheet formula to take the price cell and the tax cell
         // and add them together
         converter: (value, {row, column}) => {
-            let priceCell = cellLabel(row, column - 2);
-            let taxCell = cellLabel(row, column - 1);
+            let priceCell = salsacsv.cellLabel(row, column - 2);
+            let taxCell = salsacsv.cellLabel(row, column - 1);
             
             return `=${priceCell}+${taxCell}`;
         }
@@ -101,8 +99,27 @@ const data = [
         price: 529
     }
 ];
-
-module.exports = {
-    data,
-    columns
+const options = {
+    includeHeader: true
 };
+
+const csv = salsacsv.toCSV(data, columns, options);
+
+console.log(csv);
+/*
+"Date","Name","Price","Tax","Total"
+2019/8/25,"Cat Chow",3.49,0.21,=C2+D2
+2019/8/26,"Water",1.29,0.08,=C3+D3
+2019/8/26,"Light Bulbs",5.29,0.32,=C4+D4
+*/
+
+const orders = salsacsv.fromCSV(csv, columns, options);
+
+console.log(orders);
+/*
+[
+    { date: 2019-08-25T04:00:00.000Z, name: 'Cat Chow', price: 349 },
+    { date: 2019-08-26T04:00:00.000Z, name: 'Water', price: 129 },
+    { date: 2019-08-26T04:00:00.000Z, name: 'Light Bulbs', price: 529 }
+]
+*/
