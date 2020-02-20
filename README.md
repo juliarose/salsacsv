@@ -20,8 +20,12 @@ A basic, explicit CSV parsing and formatting library for use in node.js. CSV str
     -   [Properties](#properties)
 -   [Converter](#converter)
     -   [Parameters](#parameters-3)
+-   [ConverterDetails](#converterdetails)
+    -   [Properties](#properties-1)
 -   [Parser](#parser)
     -   [Parameters](#parameters-4)
+-   [ParserDetails](#parserdetails)
+    -   [Properties](#properties-2)
 
 ### salsacsv
 
@@ -37,7 +41,7 @@ Converts an array of objects to a CSV string.
 -   `columns` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Column](#column)>** An array containing columns.
 -   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Parsing options. (optional, default `{}`)
     -   `options.includeHeader` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Whether the CSV has a header or not, the first line will be skipped if this is set to true.
-    -   `options.delimeter` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The delimiter for the CSV string. (optional, default `','`)
+    -   `options.delimiter` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The delimiter for the CSV string. (optional, default `','`)
 
 ##### Examples
 
@@ -60,7 +64,7 @@ toCSV([
 ], {
     includeHeader: true
 });
-// '"Name","Price"\n"Cat Chow",5.29'
+// "Name","Price"\n"Cat Chow",5.29
 ```
 
 Returns **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** CSV string.
@@ -76,7 +80,7 @@ Converts a CSV string into objects.
 -   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Parsing options. (optional, default `{}`)
     -   `options.includeHeader` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Whether the CSV has a header or not.
     -   `options.includeEmptyValues` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Whether to assign empty values to object or not.
-    -   `options.delimeter` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The delimiter of the CSV string. (optional, default `','`)
+    -   `options.delimiter` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The delimiter of the CSV string. (optional, default `','`)
 
 ##### Examples
 
@@ -120,8 +124,8 @@ Gets the cell label.
 
 ##### Parameters
 
--   `rowNumber` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Zero-indexed row number.
--   `columnNumber` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Zero-indexed column number.
+-   `rowNumber` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Zero-based row number.
+-   `columnNumber` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Zero-based column number.
 
 ##### Examples
 
@@ -143,37 +147,59 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 -   `key` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** The object key for this column.
 -   `required` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Indicates whether the value should be defined when getting value from CSV. Throws an error if the resulting value is null, undefined, or an empty string.
 -   `converter` **[Converter](#converter)?** The function called to convert value to CSV.
--   `parser` **[Parser](#parser)?** The function called to parse value from CSV. If the value to parse is empty, the function will not be called unless parseEmpty is set to true.
+-   `parser` **[Parser](#parser)?** The function called to parse value from CSV. Will not be called unless parseEmpty is set to true.
 -   `parseEmpty` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Whether to parse empty values or not.
 
 ### Converter
 
-Function called to convert value to raw CSV.
+Function to convert value to raw CSV.
 
 Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
 
 #### Parameters
 
--   `value` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Value from object.
--   `details` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Details of cell.
-    -   `details.obj` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Source object.
-    -   `details.key` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The key of the value we want to take from the object for this column.
-    -   `details.row` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Row number.
-    -   `details.column` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Column number.
+-   `value` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Value from object.
+-   `details` **[ConverterDetails](#converterdetails)?** Details of cell.
+
+Returns **([String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number) | null | [undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined))** Value of cell.
+
+### ConverterDetails
+
+Converter details
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+#### Properties
+
+-   `obj` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** Source object.
+-   `key` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** The key of the value we want to take from the object for this column.
+-   `row` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** Row number.
+-   `column` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** Column number.
 
 ### Parser
 
-Function called to parse value from raw CSV.
+Function to parse value from raw CSV.
 
 Type: [Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)
 
 #### Parameters
 
--   `value` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Value of cell.
--   `details` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** Details of cell.
-    -   `details.key` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Name of key to assign to object.
-    -   `details.row` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Row number.
-    -   `details.column` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Column number.
+-   `value` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Value of cell.
+-   `details` **[ParserDetails](#parserdetails)?** Details of cell.
+
+Returns **any** Parsed value from CSV string.
+
+### ParserDetails
+
+Parser details
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+#### Properties
+
+-   `key` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Name of key to assign to object.
+-   `row` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** Row number.
+-   `column` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** Column number.
 
 ## License
 
