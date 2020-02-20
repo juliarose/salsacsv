@@ -1,12 +1,22 @@
 {
   "name": "salsacsv",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
+  "homepage": "https://github.com/juliarose/salsacsv#readme",
+  "types": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juliarose/salsacsv.git"
+  },
+  "bugs": {
+    "url": "https://github.com/juliarose/salsacsv/issues"
+  },
   "scripts": {
     "test": "jest",
     "watch": "jest --watch .js",
-    "docs": "documentation readme index.js --section=API"
+    "docs": "documentation readme index.js --section=API",
+    "declaration:build": "rm -f index.d.ts && tsc -p declaration.tsconfig.json"
   },
   "devDependencies": {
     "documentation": "^12.1.1",
@@ -14,6 +24,6 @@
     "eslint-plugin-jsdoc": "^15.8.4",
     "jest": "^24.9.0"
   },
-  "author": "Julia Rose",
+  "author": "Julia Rose <juliarosedeveloper@gmail.com>",
   "license": "MIT"
 }

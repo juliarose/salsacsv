@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Escapes a string in CSV.
  * @param {String} str - String.
@@ -37,16 +35,17 @@ function detectColumn(column) {
     } else if (columnIsObject) {
         // it is an object and it has a key
         return column;
-    } else {
-        return null;
     }
+    
+    return null;
 }
 
 /**
  * Detects columns from a CSV string.
  * @param {String} csvStr - CSV string.
+ * @param {Object} options - Options.
  * @param {Boolean} [options.includeHeader] - Whether the CSV has a header or not.
- * @param {String} [options.delimeter=','] - The delimiter of the CSV string.
+ * @param {String} [options.delimiter=','] - The delimiter of the CSV string.
  * @returns {Column[]} Array of columns.
  * @private
  */
@@ -64,7 +63,7 @@ function detectColumnsFromCSV(csvStr, options = {}) {
     } else {
         // setup some column names
         columns = split.map((value, i) => {
-            return 'col' + (i + 1);
+            return `col${(i + 1)}`;
         });
     }
     
@@ -74,6 +73,7 @@ function detectColumnsFromCSV(csvStr, options = {}) {
 /**
  * Detects columns from an array of objects.
  * @param {Object[]} rows - Array of objects to take columns from.
+ * @param {Object} options - Options.
  * @param {Boolean} [options.includeHeader] - Whether the CSV has a header or not.
  * @returns {Column[]} Array of columns.
  * @private
@@ -116,9 +116,9 @@ function columnLabel(columnNumber) {
     
     if (concat > 0) {
         return columnLabel(concat - 1) + letter;
-    } else {
-        return letter;
     }
+    
+    return letter;
 }
 
 /**
@@ -137,11 +137,11 @@ function csvToArray(str, delimiter = ',') {
     const objPattern = new RegExp(
         (
             // delimiters
-            '(\\' + delimiter + '|\\r?\\n|\\r|^)' +
+            `(\\${delimiter}|\\r?\\n|\\r|^)` +
             // quoted fields
             '(?:"([^"]*(?:""[^"]*)*)"|' +
             // standard fields (numbers, dates, unqouted text fields)
-            '([^"\\' + delimiter + '\\r\\n]*))'
+            `([^"\\${delimiter}\\r\\n]*))`
         ),
         'gi'
     );
@@ -157,8 +157,8 @@ function csvToArray(str, delimiter = ',') {
     // until we can no longer find a match
     while (matches = objPattern.exec(str)) {
         // Get the delimiter that was found
-        let matchedDelimiter = matches[1];
-        let hasRowDelimiter = Boolean(
+        const matchedDelimiter = matches[1];
+        const hasRowDelimiter = Boolean(
             matchedDelimiter.length > 0 &&
             matchedDelimiter !== delimiter
         );
@@ -201,7 +201,7 @@ function csvToArray(str, delimiter = ',') {
  * @param {Column[]} columns - An array containing columns.
  * @param {Object} [options={}] - Parsing options.
  * @param {Boolean} [options.includeHeader] - Whether the CSV has a header or not, the first line will be skipped if this is set to true.
- * @param {String} [options.delimeter=','] - The delimiter for the CSV string.
+ * @param {String} [options.delimiter=','] - The delimiter for the CSV string.
  * @returns {String} CSV string.
  * @public
  * @memberof salsacsv
@@ -342,7 +342,7 @@ function toCSV(rows, columns, options = {}) {
  * @param {Object} [options={}] - Parsing options.
  * @param {Boolean} [options.includeHeader] - Whether the CSV has a header or not.
  * @param {Boolean} [options.includeEmptyValues] - Whether to assign empty values to object or not.
- * @param {String} [options.delimeter=','] - The delimiter of the CSV string.
+ * @param {String} [options.delimiter=','] - The delimiter of the CSV string.
  * @returns {Object[]} Array of objects.
  * @public
  * @memberof salsacsv
@@ -511,26 +511,37 @@ function cellLabel(rowNumber, columnNumber) {
  */
 
 /**
- * Function called to convert value to raw CSV.
- * @typedef {Function} Converter
- * @param {String} value - Value from object.
- * @param {Object} details - Details of cell.
- * @param {Object} details.obj - Source object.
- * @param {String} details.key - The key of the value we want to take from the object for this column.
- * @param {Object} details.row - Row number.
- * @param {Object} details.column - Column number.
+ * Function to convert value to raw CSV.
+ * @callback Converter
+ * @param {String} [value] - Value from object.
+ * @param {ConverterDetails} [details] - Details of cell.
+ * @returns {(String|Number|null|undefined)} Value of cell. 
  */
 
 /**
- * Function called to parse value from raw CSV.
- * @typedef {Function} Parser
- * @param {String} value - Value of cell.
- * @param {Object} details - Details of cell.
- * @param {String} details.key - Name of key to assign to object.
- * @param {Object} details.row - Row number.
- * @param {Object} details.column - Column number.
+ * Converter details
+ * @typedef {Object} ConverterDetails
+ * @property {Object} [obj] - Source object.
+ * @property {String} [key] - The key of the value we want to take from the object for this column.
+ * @property {Number} [row] - Row number.
+ * @property {Number} [column] - Column number.
  */
 
+/**
+ * Function to parse value from raw CSV.
+ * @callback Parser
+ * @param {String} [value] - Value of cell.
+ * @param {ParserDetails} [details] - Details of cell.
+ * @returns {*} Parsed value from CSV string.
+ */
+
+/**
+ * Parser details
+ * @typedef {Object} ParserDetails
+ * @property {String} [key] - Name of key to assign to object.
+ * @property {Number} [row] - Row number.
+ * @property {Number} [column] - Column number.
+ */
 
 /**
  * Used for converting data to and from CSV.
